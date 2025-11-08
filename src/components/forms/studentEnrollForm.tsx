@@ -2,9 +2,11 @@
 
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import SelectBox from "react-select";
+import dynamic from "next/dynamic";
+const SelectBox = dynamic(() => import("react-select"), { ssr: false });
 import useFetchCourses from "../../hooks/fetchCourses";
 import { CourseType, SubjectType } from "../../data/courses";
+
 
 type FormValues = {
   firstName: string;
