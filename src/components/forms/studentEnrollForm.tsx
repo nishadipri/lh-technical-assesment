@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import SelectBox from "react-select";
 import useFetchCourses from "../../hooks/fetchCourses";
@@ -11,9 +11,9 @@ type FormValues = {
   lastName: string;
   email: string;
   courseId: string;
-  startDate?: string;
-  notes?: string;
-  subjectIds: string[];
+ 
+ 
+  subjectIds: string[]; // we will store just the ids here
 };
 
 type Props = {
@@ -31,13 +31,15 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
     setError,
     clearErrors,
   } = useForm<FormValues>({
+    // If you want real-time disabling based on validity, uncomment:
+    // mode: "onChange",
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
       courseId: "",
-      startDate: "",
-      notes: "",
+      
+     
       subjectIds: [],
     },
   });
@@ -45,37 +47,27 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
   const watchedCourseId = watch("courseId");
   const watchedSubjectIds = watch("subjectIds");
 
-  console.log("watchedSubjectIds", watchedSubjectIds);
-
-  const [courses, setCourses] = useState<CourseType[]>([]);
-  const [fetchError, setFetchError] = useState<string | null>(null);
   const {
     courses: fetchedCourses,
     isLoading,
     error: fetchCoursesError,
-    refetch,
   } = useFetchCourses(2000);
 
-  let subjects = [];
+  // Build subject options from selected course
   const selectedCourse = fetchedCourses.find((c) => c.id === watchedCourseId);
-  if (selectedCourse) {
-    subjects = selectedCourse.subjects.map((subject: SubjectType) => ({
+  const subjects =
+    selectedCourse?.subjects.map((subject: SubjectType) => ({
       value: subject.id,
       label: subject.name,
-    }));
-  }
+    })) || [];
 
   const submit = async (data: FormValues) => {
-    console.log("submit:", data);
-    // application-level submit handler (default: console.log)
-    // TODO: Validate data.subjectIds length is 3.
-    // If not, show error message
-   if (data.subjectIds.length !== 3) {
+    // Final safeguard (in case user bypasses UI somehow)
+    if (data.subjectIds.length < 3) {
       setError("subjectIds", {
         type: "manual",
-        message: "Select 3 subjects",
+        message: "You should select at least 3 subjects",
       });
-      console.error("Please select exactly 3 subjects.");
       return;
     }
 
@@ -164,27 +156,56 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
           <Controller
             name="subjectIds"
             control={control}
-            render={({ field }) => (
-              <SelectBox isMulti options={subjects} {...field} />
-            )}
+            rules={{
+              validate: (value) =>
+                (Array.isArray(value) && value.length >= 3) ||
+                "You should select at least 3 subjects",
+            }}
+            render={({ field: { onChange, value, ref } }) => {
+              // value is string[] (ids). Map it to the option objects for react-select
+              const selectedOptions = subjects.filter((opt: any) =>
+                value?.includes(opt.value)
+              );
+              return (
+                <SelectBox
+                  ref={ref}
+                  isMulti
+                  options={subjects}
+                  value={selectedOptions}
+                  onChange={(selected) => {
+                    const nextValues = (selected || []).map(
+                      (s: any) => s.value
+                    );
+                    onChange(nextValues);
+
+                    if (nextValues.length < 3) {
+                      setError("subjectIds", {
+                        type: "validate",
+                        message: "You should select at least 3 subjects",
+                      });
+                    } else {
+                      clearErrors("subjectIds");
+                    }
+                  }}
+                  placeholder="Select at least 3 subjects"
+                />
+              );
+            }}
           />
         </label>
-        {errors.courseId && <div role="alert">{errors.courseId.message}</div>}
+        {errors.subjectIds && (
+          <div role="alert" style={{ color: "crimson" }}>
+            {errors.subjectIds.message}
+          </div>
+        )}
+        <small>
+          Currently selected: {watchedSubjectIds?.length || 0} (need 3 or more)
+        </small>
       </div>
 
-      <div>
-        <label>
-          Start date
-          <input {...register("startDate")} type="date" />
-        </label>
-      </div>
+     
 
-      <div>
-        <label>
-          Notes
-          <textarea {...register("notes")} rows={3} />
-        </label>
-      </div>
+      
 
       <div>
         <button type="submit" disabled={isSubmitting}>
