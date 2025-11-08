@@ -1,25 +1,45 @@
-import React from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import StudentEnrollForm from '../components/forms/studentEnrollForm';
+"use client";
 
+import React, { useState } from "react";
+import StudentEnrollForm from "../components/forms/studentEnrollForm";
+import StudentSummaryTable, {
+  StudentSummaryData,
+} from "../components/tables/studentSummaryTable";
+import useFetchCourses from "../hooks/fetchCourses";
 
 export default function Home() {
+  const [submitted, setSubmitted] = useState<StudentSummaryData | null>(null);
+
+  // Fetch courses to resolve course and subject names for display
+  const { courses: fetchedCourses } = useFetchCourses(2000);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Container>
-          <StudentEnrollForm />
+    <div className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-12 col-lg-8">
+          <StudentEnrollForm
+            onSubmit={(data) => {
+              // Resolve course and subject names for nicer display
+              const selectedCourse = fetchedCourses.find(
+                (c) => c.id === data.courseId
+              );
 
-     
-    </Container>
+              const subjectNames =
+                selectedCourse?.subjects
+                  .filter((s: any) => data.subjectIds.includes(s.id))
+                  .map((s: any) => s.name) ?? [];
 
+              setSubmitted({
+                ...data,
+                courseName: selectedCourse?.name,
+                subjectNames,
+              });
+            }}
+          />
 
-
-
-
-      </main>
+          {submitted && <StudentSummaryTable data={submitted} />}
+        </div>
+      </div>
     </div>
   );
 }
