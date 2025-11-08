@@ -1,6 +1,7 @@
 export type Course = {
   name: string;
-  subjects: { name: string }[];
+  subjects: { name: string, id : string }[];
+  id : string
 };
 
 

@@ -1,4 +1,3 @@
-// ...existing code...
 import { useState, useEffect, useCallback } from "react";
 import { courses as coursesData } from "../data/courses";
 
