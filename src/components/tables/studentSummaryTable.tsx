@@ -8,8 +8,6 @@ export type StudentSummaryData = {
   email: string;
   courseId: string;
   courseName?: string;
-  startDate?: string;
-  notes?: string;
   subjectIds: string[];
   subjectNames?: string[];
 };
@@ -25,8 +23,6 @@ export default function StudentSummaryTable({ data }: Props) {
     email,
     courseName,
     courseId,
-    startDate,
-    notes,
     subjectNames,
     subjectIds,
   } = data;
@@ -63,14 +59,7 @@ export default function StudentSummaryTable({ data }: Props) {
                   )}
                 </td>
               </tr>
-              <tr>
-                <th>Start date</th>
-                <td>{startDate || "-"}</td>
-              </tr>
-              <tr>
-                <th>Notes</th>
-                <td>{notes || "-"}</td>
-              </tr>
+             
               <tr>
                 <th>Subjects</th>
                 <td>
