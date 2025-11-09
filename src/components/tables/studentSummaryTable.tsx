@@ -14,15 +14,16 @@ export type StudentSummaryData = {
 
 type Props = {
   data: StudentSummaryData[];
+  onEdit?: (index: number) => void;
 };
 
-export default function StudentSummaryTable({ data }: Props) {
+export default function StudentSummaryTable({ data, onEdit }: Props) {
   if (!data || data.length === 0) return null;
 
   return (
     <div className="card shadow-sm border-0 rounded-3 overflow-hidden mb-5">
       <div className="card-header bg-secondary text-white py-3">
-        <h2 className="h6 mb-0 tracking-wide">Enrolled Students</h2>
+        <h2 className="h6 mb-0">Enrolled Students</h2>
       </div>
       <div className="card-body p-0">
         <div className="table-responsive">
@@ -34,6 +35,7 @@ export default function StudentSummaryTable({ data }: Props) {
                 <th className="py-3 px-3">Email</th>
                 <th className="py-3 px-3">Course</th>
                 <th className="py-3 px-3">Subjects</th>
+                <th className="py-3 px-3" style={{ minWidth: 110 }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -41,15 +43,10 @@ export default function StudentSummaryTable({ data }: Props) {
                 const fullName = `${row.firstName} ${row.lastName}`.trim();
                 const courseText = row.courseName ?? row.courseId;
                 const subjects =
-                  (row.subjectNames?.length
-                    ? row.subjectNames
-                    : row.subjectIds) || [];
+                  (row.subjectNames?.length ? row.subjectNames : row.subjectIds) || [];
 
                 return (
-                  <tr
-                    key={idx}
-                    className="transition-colors hover:bg-slate-50"
-                  >
+                  <tr key={idx} className="transition-colors hover:bg-slate-50">
                     <td className="py-2 px-3 text-muted small">{idx + 1}</td>
                     <td className="py-2 px-3 fw-medium">{fullName}</td>
                     <td className="py-2 px-3">
@@ -72,6 +69,17 @@ export default function StudentSummaryTable({ data }: Props) {
                         ))}
                       </div>
                     </td>
+                    <td className="py-2 px-3">
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => onEdit?.(idx)}
+                        aria-label={`Edit ${fullName}`}
+                        title="Edit"
+                      >
+                        Edit
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
@@ -79,7 +87,7 @@ export default function StudentSummaryTable({ data }: Props) {
             {data.length === 0 && (
               <tfoot>
                 <tr>
-                  <td colSpan={5} className="text-center py-4 text-muted">
+                  <td colSpan={6} className="text-center py-4 text-muted">
                     No students enrolled yet.
                   </td>
                 </tr>
@@ -89,9 +97,7 @@ export default function StudentSummaryTable({ data }: Props) {
         </div>
       </div>
       <div className="card-footer bg-white py-2 px-3">
-        <p className="mb-0 text-muted text-xs">
-          Stored only in component state (no backend).
-        </p>
+        <p className="mb-0 text-muted text-xs">Stored only in component state (no backend).</p>
       </div>
     </div>
   );
