@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import StudentEnrollForm from "../components/forms/studentEnrollForm";
+import StudentEnrollForm, { FormValues } from "../components/StudentEnrollForm";
 import StudentSummaryTable, {
   StudentSummaryData,
-} from "../components/tables/studentSummaryTable";
+} from "../components/StudentSummaryTable";
 import useFetchCourses from "../hooks/fetchCourses";
 
 export default function Home() {
