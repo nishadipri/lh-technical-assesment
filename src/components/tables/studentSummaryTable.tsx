@@ -20,17 +20,20 @@ export default function StudentSummaryTable({ data }: Props) {
   if (!data || data.length === 0) return null;
 
   return (
-    <div className="card shadow-sm mt-4">
-      <div className="card-body p-4">
-        <h2 className="h5 mb-3">Enrolled Students</h2>
+    <div className="card shadow-sm border-0 rounded-3 overflow-hidden mb-5">
+      <div className="card-header bg-secondary text-white py-3">
+        <h2 className="h6 mb-0 tracking-wide">Enrolled Students</h2>
+      </div>
+      <div className="card-body p-0">
         <div className="table-responsive">
-          <table className="table table-bordered table-striped table-sm align-middle">
-            <thead>
+          <table className="table table-striped table-hover mb-0 align-middle text-sm">
+            <thead className="table-light">
               <tr>
-                <th style={{ minWidth: 180 }}>Name</th>
-                <th style={{ minWidth: 220 }}>Email</th>
-                <th style={{ minWidth: 160 }}>Course</th>
-                <th>Subjects</th>
+                <th className="py-3 px-3">#</th>
+                <th className="py-3 px-3">Name</th>
+                <th className="py-3 px-3">Email</th>
+                <th className="py-3 px-3">Course</th>
+                <th className="py-3 px-3">Subjects</th>
               </tr>
             </thead>
             <tbody>
@@ -38,24 +41,56 @@ export default function StudentSummaryTable({ data }: Props) {
                 const fullName = `${row.firstName} ${row.lastName}`.trim();
                 const courseText = row.courseName ?? row.courseId;
                 const subjects =
-                  row.subjectNames && row.subjectNames.length > 0
-                    ? row.subjectNames.join(", ")
-                    : row.subjectIds.join(", ");
+                  (row.subjectNames?.length
+                    ? row.subjectNames
+                    : row.subjectIds) || [];
 
                 return (
-                  <tr key={idx}>
-                    <td>{fullName}</td>
-                    <td>{row.email}</td>
-                    <td>{courseText}</td>
-                    <td>{subjects}</td>
+                  <tr
+                    key={idx}
+                    className="transition-colors hover:bg-slate-50"
+                  >
+                    <td className="py-2 px-3 text-muted small">{idx + 1}</td>
+                    <td className="py-2 px-3 fw-medium">{fullName}</td>
+                    <td className="py-2 px-3">
+                      <span className="text-primary">{row.email}</span>
+                    </td>
+                    <td className="py-2 px-3">
+                      <span className="badge bg-info-subtle text-info-emphasis border border-info-subtle rounded-pill px-3 py-2">
+                        {courseText}
+                      </span>
+                    </td>
+                    <td className="py-2 px-3">
+                      <div className="d-flex flex-wrap gap-2">
+                        {subjects.map((s: string, sIdx: number) => (
+                          <span
+                            key={`${s}-${sIdx}`}
+                            className="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle rounded-pill px-3 py-2"
+                          >
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
+            {data.length === 0 && (
+              <tfoot>
+                <tr>
+                  <td colSpan={5} className="text-center py-4 text-muted">
+                    No students enrolled yet.
+                  </td>
+                </tr>
+              </tfoot>
+            )}
           </table>
         </div>
-        <p className="text-muted mt-2 text-sm">
-          Data is stored only in component state (no backend).
+      </div>
+      <div className="card-footer bg-white py-2 px-3">
+        <p className="mb-0 text-muted text-xs">
+          Stored only in component state (no backend).
         </p>
       </div>
     </div>

@@ -35,7 +35,7 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
       lastName: "",
       email: "",
       courseId: "",
-     
+    
       subjectIds: [],
     },
   });
@@ -49,7 +49,6 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
     error: fetchCoursesError,
   } = useFetchCourses(2000);
 
-  // Build subject options from selected course
   const selectedCourse = fetchedCourses.find((c) => c.id === watchedCourseId);
   const subjects =
     selectedCourse?.subjects.map((subject: SubjectType) => ({
@@ -58,21 +57,15 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
     })) || [];
 
   const submit = async (data: FormValues) => {
-    // Final safeguard (in case user bypasses UI somehow)
-    if (data.subjectIds.length < 3) {
+    if (!Array.isArray(data.subjectIds) || data.subjectIds.length < 3) {
       setError("subjectIds", {
         type: "manual",
         message: "You should select at least 3 subjects",
       });
       return;
     }
-
     try {
-      if (onSubmit) {
-        await onSubmit(data);
-      } else {
-        console.log("Enroll student:", data);
-      }
+      if (onSubmit) await onSubmit(data);
       reset();
     } catch (err) {
       console.error("submit error:", err);
@@ -83,68 +76,83 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
   const subjectSelectInputId = "enroll-subject-select-input";
 
   return (
-    <div className="card shadow-sm">
-      <div className="card-body p-4">
-        <h1 className="h4 mb-4">Enroll Student</h1>
-
-        <form onSubmit={handleSubmit(submit)} noValidate>
+    <div className="card shadow-sm border-0 rounded-3 overflow-hidden mb-5 transition-all hover:shadow-lg">
+      <div className="card-header bg-gradient bg-primary text-white py-3">
+        <h1 className="h5 mb-0 tracking-wide">Enroll Student</h1>
+      </div>
+      <div className="card-body p-4 bg-light">
+        <form onSubmit={handleSubmit(submit)} noValidate className="space-y-4">
           {/* First Name */}
-          <div className="mb-3">
-            <label className="form-label">First name</label>
+          <div>
+            <label className="form-label fw-semibold text-secondary">
+              First name
+            </label>
             <input
               {...register("firstName", { required: "First name is required" })}
               type="text"
               placeholder="First name"
-              className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
+              className={`form-control rounded-md shadow-sm focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.firstName ? "is-invalid border-danger" : ""
+              }`}
             />
             {errors.firstName && (
-              <div role="alert" className="invalid-feedback d-block">
+              <div role="alert" className="invalid-feedback d-block text-sm">
                 {errors.firstName.message}
               </div>
             )}
           </div>
 
           {/* Last Name */}
-          <div className="mb-3">
-            <label className="form-label">Last name</label>
+          <div>
+            <label className="form-label fw-semibold text-secondary ">
+              Last name
+            </label>
             <input
               {...register("lastName", { required: "Last name is required" })}
               type="text"
               placeholder="Last name"
-              className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
+              className={`form-control rounded-md shadow-sm focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.lastName ? "is-invalid border-danger" : ""
+              }`}
             />
             {errors.lastName && (
-              <div role="alert" className="invalid-feedback d-block">
+              <div role="alert" className="invalid-feedback d-block text-sm">
                 {errors.lastName.message}
               </div>
             )}
           </div>
 
           {/* Email */}
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Enter a valid email address",
-                },
-              })}
-              type="email"
-              placeholder="you@example.com"
-              className={`form-control ${errors.email ? "is-invalid" : ""}`}
-            />
-            {errors.email && (
-              <div role="alert" className="invalid-feedback d-block">
-                {errors.email.message}
-              </div>
-            )}
-          </div>
+            <div>
+              <label className="form-label fw-semibold text-secondary">
+                Email
+              </label>
+              <input
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Enter a valid email address",
+                  },
+                })}
+                type="email"
+                placeholder="you@example.com"
+                className={`form-control rounded-md shadow-sm focus:ring-2 focus:ring-primary focus:border-primary ${
+                  errors.email ? "is-invalid border-danger" : ""
+                }`}
+              />
+              {errors.email && (
+                <div role="alert" className="invalid-feedback d-block text-sm">
+                  {errors.email.message}
+                </div>
+              )}
+            </div>
 
           {/* Course */}
-          <div className="mb-3">
-            <label className="form-label">Course</label>
+          <div>
+            <label className="form-label fw-semibold text-secondary">
+              Course
+            </label>
             {isLoading ? (
               <div className="form-text">Loading courses…</div>
             ) : fetchCoursesError ? (
@@ -154,7 +162,9 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
             ) : (
               <select
                 {...register("courseId", { required: "Please select a course" })}
-                className={`form-select ${errors.courseId ? "is-invalid" : ""}`}
+                className={`form-select rounded-md shadow-sm focus:ring-2 focus:ring-primary focus:border-primary ${
+                  errors.courseId ? "is-invalid border-danger" : ""
+                }`}
               >
                 <option value="">-- Select a course --</option>
                 {fetchedCourses.map((c) => (
@@ -165,15 +175,18 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
               </select>
             )}
             {errors.courseId && (
-              <div role="alert" className="invalid-feedback d-block">
+              <div role="alert" className="invalid-feedback d-block text-sm">
                 {errors.courseId.message}
               </div>
             )}
           </div>
 
           {/* Subjects */}
-          <div className="mb-3">
-            <label htmlFor={subjectSelectInputId} className="form-label">
+          <div>
+            <label
+              htmlFor={subjectSelectInputId}
+              className="form-label fw-semibold text-secondary"
+            >
               Subjects
             </label>
             <Controller
@@ -201,7 +214,6 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
                     onChange={(selected: any) => {
                       const nextValues = (selected || []).map((s: any) => s.value);
                       onChange(nextValues);
-
                       if (nextValues.length < 3) {
                         setError("subjectIds", {
                           type: "validate",
@@ -217,18 +229,25 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
               }}
             />
             {errors.subjectIds && (
-              <div role="alert" className="text-danger mt-1">
+              <div role="alert" className="text-danger mt-1 text-sm">
                 {errors.subjectIds.message}
               </div>
             )}
             <small className="form-text text-muted">
-              Currently selected: {watchedSubjectIds?.length || 0} (need 3 or more)
+              Selected: {watchedSubjectIds?.length || 0} / min 3
             </small>
           </div>
-          {/* Submit */}
-          <div className="d-flex justify-content-end">
-            <button type="submit" disabled={isSubmitting} className="btn btn-primary px-4">
-              Enroll
+
+          
+
+      
+          <div className="d-flex justify-content-end pt-2">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="btn btn-primary px-4 py-2 fw-semibold shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            >
+              {isSubmitting ? "Submitting…" : "Enroll"}
             </button>
           </div>
         </form>
