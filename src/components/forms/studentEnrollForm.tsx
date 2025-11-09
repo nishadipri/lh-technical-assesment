@@ -228,6 +228,7 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
                 );
               }}
             />
+            
             {errors.subjectIds && (
               <div role="alert" className="text-danger mt-1 text-sm">
                 {errors.subjectIds.message}
