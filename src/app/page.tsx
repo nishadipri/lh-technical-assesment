@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import StudentEnrollForm, { FormValues } from "../components/forms/studentEnrollForm";
+import StudentEnrollForm, {
+  FormValues,
+} from "../components/forms/studentEnrollForm";
 import StudentSummaryTable, {
   StudentSummaryData,
 } from "../components/tables/studentSummaryTable";
@@ -18,8 +20,8 @@ export default function Home() {
     const selectedCourse = fetchedCourses.find((c) => c.id === data.courseId);
     const subjectNames =
       selectedCourse?.subjects
-        .filter((s:any) => data.subjectIds.includes(s.id))
-        .map((s:any) => s.name) ?? [];
+        .filter((s: any) => data.subjectIds.includes(s.id))
+        .map((s: any) => s.name) ?? [];
 
     return {
       firstName: data.firstName,
@@ -46,8 +48,7 @@ export default function Home() {
       lastName: s.lastName,
       email: s.email,
       courseId: s.courseId,
-      startDate: "", // keep optional; not shown in table but preserved in modal state if you wish to store it separately
-      notes: "",
+
       subjectIds: s.subjectIds,
     };
   }, [editIndex, students]);
@@ -65,15 +66,22 @@ export default function Home() {
     <div className="container py-5">
       <div className="row justify-content-center">
         <div className="col-12 col-xl-9">
-          {/* Enrollment form */}
-          <StudentEnrollForm onSubmit={handleEnroll} />
+          {/* Reused form for enrolling (create) */}
+          <StudentEnrollForm
+            onSubmit={handleEnroll}
+            submitLabel="Enroll"
+            instanceIdPrefix="enroll"
+          />
 
-          {/* Enrolled students table with Edit actions */}
-          <StudentSummaryTable data={students} onEdit={(i) => setEditIndex(i)} />
+          {/* Table with Edit action */}
+          <StudentSummaryTable
+            data={students}
+            onEdit={(i) => setEditIndex(i)}
+          />
         </div>
       </div>
 
-      {/* Edit modal */}
+      {/* Reused form inside a modal for editing */}
       <StudentEditModal
         open={editIndex !== null && !!editingInitialValues}
         initialValues={
@@ -82,13 +90,13 @@ export default function Home() {
             lastName: "",
             email: "",
             courseId: "",
-            startDate: "",
-            notes: "",
+
             subjectIds: [],
           }
         }
         onClose={() => setEditIndex(null)}
         onUpdate={handleUpdate}
+        instanceIdPrefix={`edit-${editIndex ?? 0}`}
       />
     </div>
   );

@@ -10,6 +10,7 @@ export type StudentSummaryData = {
   courseName?: string;
   subjectIds: string[];
   subjectNames?: string[];
+  
 };
 
 type Props = {
@@ -35,7 +36,7 @@ export default function StudentSummaryTable({ data, onEdit }: Props) {
                 <th className="py-3 px-3">Email</th>
                 <th className="py-3 px-3">Course</th>
                 <th className="py-3 px-3">Subjects</th>
-                <th className="py-3 px-3" style={{ minWidth: 110 }}>Action</th>
+                <th className="py-3 px-3" style={{ minWidth: 120 }}>Action</th>
               </tr>
             </thead>
             <tbody>
