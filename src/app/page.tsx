@@ -9,6 +9,7 @@ import StudentSummaryTable, {
 } from "../components/tables/studentSummaryTable";
 import StudentEditModal from "../components/edit/studentEditModal";
 import useFetchCourses from "../hooks/fetchCourses";
+import { getSubjectNames } from "../data/courses";
 
 export default function Home() {
   const [students, setStudents] = useState<StudentSummaryData[]>([]);
@@ -18,10 +19,9 @@ export default function Home() {
 
   const resolveNames = (data: FormValues): StudentSummaryData => {
     const selectedCourse = fetchedCourses.find((c) => c.id === data.courseId);
-    const subjectNames =
-      selectedCourse?.subjects
-        .filter((s: any) => data.subjectIds.includes(s.id))
-        .map((s: any) => s.name) ?? [];
+    
+    // Use the helper function to get subject names from IDs
+    const subjectNames = getSubjectNames(data.subjectIds);
 
     return {
       firstName: data.firstName,
@@ -35,6 +35,15 @@ export default function Home() {
   };
 
   const handleEnroll = (data: FormValues) => {
+    // Check for duplicate email
+    const emailExists = students.some(
+      (student) => student.email.toLowerCase() === data.email.toLowerCase()
+    );
+    
+    if (emailExists) {
+      throw new Error(`A student with email "${data.email}" is already enrolled.`);
+    }
+    
     const summary = resolveNames(data);
     setStudents((prev) => [...prev, summary]);
   };
@@ -55,6 +64,18 @@ export default function Home() {
 
   const handleUpdate = (data: FormValues) => {
     if (editIndex === null) return;
+    
+    // Check for duplicate email (excluding the current student being edited)
+    const emailExists = students.some(
+      (student, index) => 
+        index !== editIndex && 
+        student.email.toLowerCase() === data.email.toLowerCase()
+    );
+    
+    if (emailExists) {
+      throw new Error(`A student with email "${data.email}" is already enrolled.`);
+    }
+    
     const updated = resolveNames(data);
     setStudents((prev) =>
       prev.map((row, i) => (i === editIndex ? updated : row))
