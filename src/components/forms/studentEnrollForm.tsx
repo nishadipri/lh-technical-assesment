@@ -205,7 +205,7 @@ export default function StudentEnrollForm({ onSubmit }: Props) {
                   <SelectBox
                     instanceId={subjectSelectInstanceId}
                     inputId={subjectSelectInputId}
-                    inputRef={ref as any}
+                    ref={ref as any}
                     className="rs-container"
                     classNamePrefix="rs"
                     isMulti
