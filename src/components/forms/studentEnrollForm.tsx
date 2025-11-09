@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import SelectBox from "react-select";
 import useFetchCourses from "../../hooks/fetchCourses";
-import { CourseType, SubjectType } from "../../data/courses";
+import { getSubjectsForCourse } from "../../data/courses";
 
 export type FormValues = {
   firstName: string;
@@ -64,13 +64,11 @@ export default function StudentEnrollForm({
     error: fetchCoursesError,
   } = useFetchCourses(2000);
 
-  // Build subject options from selected course
-  const selectedCourse = fetchedCourses.find((c) => c.id === watchedCourseId);
-  const subjects =
-    selectedCourse?.subjects.map((subject: SubjectType) => ({
-      value: subject.id,
-      label: subject.name,
-    })) || [];
+  // Build subject options from selected course using the helper function
+  const subjects = getSubjectsForCourse(watchedCourseId).map((subject) => ({
+    value: subject.id,
+    label: subject.name,
+  }));
 
   const submit = async (data: FormValues) => {
     // Validation as requested previously
@@ -87,6 +85,13 @@ export default function StudentEnrollForm({
       if (resetAfterSubmit) reset();
     } catch (err) {
       console.error("submit error:", err);
+      // Display email uniqueness error
+      if (err instanceof Error && err.message.includes("already enrolled")) {
+        setError("email", {
+          type: "manual",
+          message: err.message,
+        });
+      }
     }
   };
 
@@ -250,6 +255,13 @@ export default function StudentEnrollForm({
                       }
                     }}
                     placeholder="Select at least 3 subjects"
+                    menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                    menuPosition="fixed"
+                    styles={{
+                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                      menu: (base) => ({ ...base, zIndex: 9999 })
+                    }}
+                    maxMenuHeight={300}
                   />
                 );
               }}
