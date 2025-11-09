@@ -1,43 +1,51 @@
 "use client";
 
 import React, { useState } from "react";
-import StudentEnrollForm, { FormValues } from "../components/StudentEnrollForm";
+import StudentEnrollForm ,{ FormValues} from "../components/forms/studentEnrollForm";
 import StudentSummaryTable, {
   StudentSummaryData,
-} from "../components/StudentSummaryTable";
+} from "../components/tables/studentSummaryTable";
 import useFetchCourses from "../hooks/fetchCourses";
 
 export default function Home() {
-  const [submitted, setSubmitted] = useState<StudentSummaryData | null>(null);
+  // Component state only: store all enrolled students
+  const [students, setStudents] = useState<StudentSummaryData[]>([]);
 
-  // Fetch courses to resolve course and subject names for display
+  // Fetch to resolve names for display (no backend)
   const { courses: fetchedCourses } = useFetchCourses(2000);
+
+  const resolveNames = (data: FormValues): StudentSummaryData => {
+    const selectedCourse = fetchedCourses.find((c) => c.id === data.courseId);
+    const subjectNames =
+      selectedCourse?.subjects
+        .filter((s: any) => data.subjectIds.includes(s.id))
+        .map((s: any) => s.name) ?? [];
+
+    return {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      courseId: data.courseId,
+      courseName: selectedCourse?.name,
+      subjectIds: data.subjectIds,
+      subjectNames,
+    };
+  };
+
+  const handleEnroll = (data: FormValues) => {
+    const summary = resolveNames(data);
+    setStudents((prev) => [...prev, summary]); // append to the table
+  };
 
   return (
     <div className="container py-4">
       <div className="row justify-content-center">
         <div className="col-12 col-lg-8">
-          <StudentEnrollForm
-            onSubmit={(data) => {
-              // Resolve course and subject names for nicer display
-              const selectedCourse = fetchedCourses.find(
-                (c) => c.id === data.courseId
-              );
+          {/* Enrollment form */}
+          <StudentEnrollForm onSubmit={handleEnroll} />
 
-              const subjectNames =
-                selectedCourse?.subjects
-                  .filter((s: any) => data.subjectIds.includes(s.id))
-                  .map((s: any) => s.name) ?? [];
-
-              setSubmitted({
-                ...data,
-                courseName: selectedCourse?.name,
-                subjectNames,
-              });
-            }}
-          />
-
-          {submitted && <StudentSummaryTable data={submitted} />}
+          {/* Enrolled students table below the form */}
+          {students.length > 0 && <StudentSummaryTable data={students} />}
         </div>
       </div>
     </div>

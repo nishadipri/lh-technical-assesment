@@ -13,82 +13,49 @@ export type StudentSummaryData = {
 };
 
 type Props = {
-  data: StudentSummaryData;
+  data: StudentSummaryData[];
 };
 
 export default function StudentSummaryTable({ data }: Props) {
-  const {
-    firstName,
-    lastName,
-    email,
-    courseName,
-    courseId,
-    subjectNames,
-    subjectIds,
-  } = data;
+  if (!data || data.length === 0) return null;
 
   return (
     <div className="card shadow-sm mt-4">
       <div className="card-body p-4">
-        <h2 className="h5 mb-3">Submitted Student Details</h2>
+        <h2 className="h5 mb-3">Enrolled Students</h2>
         <div className="table-responsive">
-          <table className=" table table-bordered table-striped table-sm align-middle">
-            <tbody>
+          <table className="table table-bordered table-striped table-sm align-middle">
+            <thead>
               <tr>
-                <th style={{ width: 220 }}>First name</th>
-                <td>{firstName}</td>
-              </tr>
-              <tr>
-                <th>Last name</th>
-                <td>{lastName}</td>
-              </tr>
-              <tr>
-                <th>Email</th>
-                <td>{email}</td>
-              </tr>
-              <tr>
-                <th>Course</th>
-                <td>
-                  {courseName? (
-                    <>
-                      <span className="fw-semibold">{courseName}</span>
-                      <span className="text-muted ms-2">(ID: {courseId})</span>
-                    </>
-                  ) : (
-                    courseId
-                  )}
-                </td>
-              </tr>
-             
-              <tr>
+                <th style={{ minWidth: 180 }}>Name</th>
+                <th style={{ minWidth: 220 }}>Email</th>
+                <th style={{ minWidth: 160 }}>Course</th>
                 <th>Subjects</th>
-                <td>
-                  {subjectNames && subjectNames.length > 0 ? (
-                    <div className="d-flex flex-wrap gap-2">
-                      {subjectNames.map((name, idx) => (
-                        <span
-                          key={`${name}-${idx}`}
-                          className="badge text-bg-primary"
-                        >
-                          {name}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-muted">
-                      {subjectIds && subjectIds.length > 0
-                        ? subjectIds.join(", ")
-                        : "-"}
-                    </div>
-                  )}
-                </td>
               </tr>
+            </thead>
+            <tbody>
+              {data.map((row, idx) => {
+                const fullName = `${row.firstName} ${row.lastName}`.trim();
+                const courseText = row.courseName ?? row.courseId;
+                const subjects =
+                  row.subjectNames && row.subjectNames.length > 0
+                    ? row.subjectNames.join(", ")
+                    : row.subjectIds.join(", ");
+
+                return (
+                  <tr key={idx}>
+                    <td>{fullName}</td>
+                    <td>{row.email}</td>
+                    <td>{courseText}</td>
+                    <td>{subjects}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
-
         <p className="text-muted mt-2 text-sm">
-          This summary reflects the data you just submitted.
+          Data is stored only in component state (no backend).
         </p>
       </div>
     </div>
