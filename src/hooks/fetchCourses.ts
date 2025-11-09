@@ -1,12 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { courses as coursesData } from "../data/courses";
+import { courses as coursesData, CourseType } from "../data/courses";
 
-export type Course = {
-    id: string;
-    title: string;
-    description?: string;
-    [key: string]: any;
-};
+export type Course = CourseType;
 
 type UseFetchCoursesResult = {
     courses: Course[];

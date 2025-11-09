@@ -11,26 +11,50 @@ const mockCourses = [
   {
     id: 'course-1',
     name: 'Computer Science',
-    title: 'Computer Science',
-    subjects: [
-      { id: 'sub-1', name: 'Data Structures' },
-      { id: 'sub-2', name: 'Algorithms' },
-      { id: 'sub-3', name: 'Database Systems' },
-      { id: 'sub-4', name: 'Operating Systems' },
-    ],
+    subjectIds: ['sub-1', 'sub-2', 'sub-3', 'sub-4'],
+    description: 'Computer Science Course'
   },
   {
     id: 'course-2',
     name: 'Mathematics',
-    title: 'Mathematics',
-    subjects: [
-      { id: 'sub-5', name: 'Calculus' },
-      { id: 'sub-6', name: 'Linear Algebra' },
-      { id: 'sub-7', name: 'Statistics' },
-      { id: 'sub-8', name: 'Discrete Math' },
-    ],
+    subjectIds: ['sub-5', 'sub-6', 'sub-7', 'sub-8'],
+    description: 'Mathematics Course'
   },
-] as any
+]
+
+// Mock the courses data module to return subjects for the mock courses
+jest.mock('../../data/courses', () => ({
+  getSubjectsForCourse: (courseId: string) => {
+    const subjectMap: Record<string, any[]> = {
+      'course-1': [
+        { id: 'sub-1', name: 'Data Structures' },
+        { id: 'sub-2', name: 'Algorithms' },
+        { id: 'sub-3', name: 'Database Systems' },
+        { id: 'sub-4', name: 'Operating Systems' },
+      ],
+      'course-2': [
+        { id: 'sub-5', name: 'Calculus' },
+        { id: 'sub-6', name: 'Linear Algebra' },
+        { id: 'sub-7', name: 'Statistics' },
+        { id: 'sub-8', name: 'Discrete Math' },
+      ],
+    }
+    return subjectMap[courseId] || []
+  },
+  getSubjectNames: (subjectIds: string[]) => {
+    const nameMap: Record<string, string> = {
+      'sub-1': 'Data Structures',
+      'sub-2': 'Algorithms',
+      'sub-3': 'Database Systems',
+      'sub-4': 'Operating Systems',
+      'sub-5': 'Calculus',
+      'sub-6': 'Linear Algebra',
+      'sub-7': 'Statistics',
+      'sub-8': 'Discrete Math',
+    }
+    return subjectIds.map(id => nameMap[id]).filter(Boolean)
+  },
+}))
 
 describe('StudentEnrollForm', () => {
   const mockOnSubmit = jest.fn()
