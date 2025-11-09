@@ -1,26 +1,125 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Bootstrap first */
+@import "bootstrap/dist/css/bootstrap.min.css";
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Tailwind layers */
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Disable preflight in tailwind.config.js to avoid Bootstrap reset conflicts */
 
+/* Typography & body */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: "case", "ss01";
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  color: #1f2937;
+  min-height: 100vh;
+}
+
+/* Card hover elevation */
+.card.shadow-sm {
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+.card.shadow-sm:hover {
+  box-shadow: 0 0.75rem 1.5rem -0.25rem rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* React-Select customizations */
+.rs-container .rs__control {
+  min-height: 46px;
+  border-radius: 0.65rem;
+  border-color: #dee2e6;
+  box-shadow: 0 0 0 2px transparent;
+  transition: box-shadow 160ms, border-color 160ms, background-color 160ms;
+  background-color: #ffffff;
+}
+.rs-container .rs__control--is-focused {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+.rs-container .rs__value-container {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.rs-container .rs__multi-value {
+  background: #0d6efd;
+  color: #fff;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  padding-left: 6px;
+  padding-right: 2px;
+}
+.rs-container .rs__multi-value__remove {
+  color: #fff;
+  transition: background-color 120ms, color 120ms;
+}
+.rs-container .rs__multi-value__remove:hover {
+  background: #fff;
+  color: #0d6efd;
+}
+
+/* Table refinements */
+.table-hover tbody tr:hover {
+  background-color: #f1f5f9;
+}
+.table thead th {
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+.table td {
+  vertical-align: middle;
+}
+
+/* Badge fallbacks if Bootstrap 5.3 subtle variants not present */
+.bg-primary-subtle {
+  background-color: #e7f1ff !important;
+}
+.text-primary-emphasis {
+  color: #0a4fad !important;
+}
+.bg-info-subtle {
+  background-color: #e5f6fd !important;
+}
+.text-info-emphasis {
+  color: #036280 !important;
+}
+.bg-secondary {
+  background: linear-gradient(135deg, #4b5563, #334155);
+}
+
+/* Utility sizes (in case Tailwind preflight disabled) */
+.text-xs {
+  font-size: 0.75rem;
+}
+.text-sm {
+  font-size: 0.875rem;
+}
+.fw-medium {
+  font-weight: 500;
+}
+
+/* Focus outline helpers (combine with Tailwind focus utilities if desired) */
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+
+/* Smooth scrollbar (optional) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 2px solid #f1f5f9;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

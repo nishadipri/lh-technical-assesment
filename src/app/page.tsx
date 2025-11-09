@@ -1,17 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import StudentEnrollForm ,{ FormValues} from "../components/forms/studentEnrollForm";
+import StudentEnrollForm, { FormValues } from "../components/forms/studentEnrollForm";
 import StudentSummaryTable, {
   StudentSummaryData,
 } from "../components/tables/studentSummaryTable";
 import useFetchCourses from "../hooks/fetchCourses";
 
 export default function Home() {
-  // Component state only: store all enrolled students
   const [students, setStudents] = useState<StudentSummaryData[]>([]);
-
-  // Fetch to resolve names for display (no backend)
   const { courses: fetchedCourses } = useFetchCourses(2000);
 
   const resolveNames = (data: FormValues): StudentSummaryData => {
@@ -34,18 +31,15 @@ export default function Home() {
 
   const handleEnroll = (data: FormValues) => {
     const summary = resolveNames(data);
-    setStudents((prev) => [...prev, summary]); // append to the table
+    setStudents((prev) => [...prev, summary]);
   };
 
   return (
-    <div className="container py-4">
+    <div className="container py-5">
       <div className="row justify-content-center">
-        <div className="col-12 col-lg-8">
-          {/* Enrollment form */}
+        <div className="col-12 col-xl-9">
           <StudentEnrollForm onSubmit={handleEnroll} />
-
-          {/* Enrolled students table below the form */}
-          {students.length > 0 && <StudentSummaryTable data={students} />}
+          <StudentSummaryTable data={students} />
         </div>
       </div>
     </div>
