@@ -9,6 +9,8 @@ A small Next.js + TypeScript app for enrolling students into courses with a mode
   - Course selection dynamically drives the Subject options
   - Subjects require at least 3 selections (immediate feedback + submit guard)
   - Real-time validation with accessible error messages
+  - **Normalized data structure** - subjects can belong to multiple courses without duplication
+  - See [DATA_STRUCTURE.md](./DATA_STRUCTURE.md) for detailed architecture
   
 - **Client-only Data Storage** (React useState)
   - Each submission is appended to a table below the form
