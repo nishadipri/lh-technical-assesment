@@ -146,7 +146,7 @@ Technical Writing (sub-shared-104)
 └─ Defined ONCE in subjects dictionary
 ```
 
-### Without Normalization (Old Way) ❌
+### Without Normalization (Old Way) 
 
 ```typescript
 // BAD: Subject data duplicated across courses
@@ -378,7 +378,7 @@ export async function getCoursesSubjects(courseId: string) {
 2. **Store only IDs** in relationships (courses → subjectIds)
 3. **Define subjects once** in the central dictionary
 4. **Use meaningful ID prefixes** (`sub-shared-`, `sub-cs-`, etc.)
-5. **Add descriptions** for better UX
+
 
 ### ❌ DON'T
 
