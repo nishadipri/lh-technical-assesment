@@ -10,7 +10,6 @@ export type StudentSummaryData = {
   courseName?: string;
   subjectIds: string[];
   subjectNames?: string[];
-  
 };
 
 type Props = {
@@ -36,7 +35,9 @@ export default function StudentSummaryTable({ data, onEdit }: Props) {
                 <th className="py-3 px-3">Email</th>
                 <th className="py-3 px-3">Course</th>
                 <th className="py-3 px-3">Subjects</th>
-                <th className="py-3 px-3" style={{ minWidth: 120 }}>Action</th>
+                <th className="py-3 px-3" style={{ minWidth: 120 }}>
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -44,7 +45,9 @@ export default function StudentSummaryTable({ data, onEdit }: Props) {
                 const fullName = `${row.firstName} ${row.lastName}`.trim();
                 const courseText = row.courseName ?? row.courseId;
                 const subjects =
-                  (row.subjectNames?.length ? row.subjectNames : row.subjectIds) || [];
+                  (row.subjectNames?.length
+                    ? row.subjectNames
+                    : row.subjectIds) || [];
 
                 return (
                   <tr key={idx} className="transition-colors hover:bg-slate-50">
@@ -98,7 +101,9 @@ export default function StudentSummaryTable({ data, onEdit }: Props) {
         </div>
       </div>
       <div className="card-footer bg-white py-2 px-3">
-        <p className="mb-0 text-muted text-xs">Stored only in component state (no backend).</p>
+        <p className="mb-0 text-muted text-xs">
+          Stored only in component state for demo.
+        </p>
       </div>
     </div>
   );
