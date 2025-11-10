@@ -43,7 +43,7 @@ A small Next.js + TypeScript app for enrolling students into courses with a mode
 
 ## Screenshots
 
-![App Screenshot](./images/sShot1.png)
+![App Screenshot](.public/images/sShot1.png)
 
 
 ## Getting Started
