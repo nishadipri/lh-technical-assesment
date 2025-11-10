@@ -52,6 +52,11 @@ A small Next.js + TypeScript app for enrolling students into courses with a mode
 - Enrolled students table with “Edit” actions
 - Edit modal with the same reusable form
 
+![App Screenshot](./images/Sshot1.png)
+![App Screenshot](./images/Sshot2.png)
+![App Screenshot](./images/Sshot3.png)
+
+
 (If you’d like, add screenshots/gifs here.)
 
 ## Getting Started
