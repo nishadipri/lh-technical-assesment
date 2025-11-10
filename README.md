@@ -2,6 +2,17 @@
 
 A small Next.js + TypeScript app for enrolling students into courses with a modern, accessible form, client‑side validation, and a dynamic summary table. Styling is a blend of Bootstrap components and Tailwind utility classes.
 
+## Screenshots
+
+### Student Enrollment Form
+![Student Enrollment Form](./public/images/Sshot1.png)
+
+### Enrolled Students Table
+![Enrolled Students Table](./public/images/Sshot2.png)
+
+### Edit Student Modal
+![Edit Student Modal](./public/images/Sshot13.png)
+
 ## Features
 
 - **Student Enrollment Form** with comprehensive validation (React Hook Form)
