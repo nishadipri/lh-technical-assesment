@@ -18,9 +18,9 @@ type Props = {
   onSubmit: (data: FormValues) => void | Promise<void>;
   // Reuse props for both Create (Enroll) and Edit flows
   initialValues?: FormValues;
-  submitLabel?: string; // defaults to "Enroll"
-  instanceIdPrefix?: string; // defaults to "enroll"
-  resetAfterSubmit?: boolean; // defaults to true (set to false for edit)
+  submitLabel?: string;
+  instanceIdPrefix?: string;
+  resetAfterSubmit?: boolean;
 };
 
 export default function StudentEnrollForm({
@@ -45,7 +45,6 @@ export default function StudentEnrollForm({
       lastName: "",
       email: "",
       courseId: "",
-
       subjectIds: [],
     },
   });
@@ -71,7 +70,6 @@ export default function StudentEnrollForm({
   }));
 
   const submit = async (data: FormValues) => {
-    // Validation as requested previously
     if (!Array.isArray(data.subjectIds) || data.subjectIds.length < 3) {
       setError("subjectIds", {
         type: "manual",
@@ -108,7 +106,6 @@ export default function StudentEnrollForm({
       </div>
       <div className="card-body p-4 bg-light">
         <form onSubmit={handleSubmit(submit)} noValidate className="space-y-4">
-          {/* First Name */}
           <div>
             <label className="form-label fw-semibold text-secondary">
               First name
@@ -128,7 +125,6 @@ export default function StudentEnrollForm({
             )}
           </div>
 
-          {/* Last Name */}
           <div>
             <label className="form-label fw-semibold text-secondary">
               Last name
@@ -148,7 +144,6 @@ export default function StudentEnrollForm({
             )}
           </div>
 
-          {/* Email */}
           <div>
             <label className="form-label fw-semibold text-secondary">
               Email
@@ -174,7 +169,6 @@ export default function StudentEnrollForm({
             )}
           </div>
 
-          {/* Course */}
           <div>
             <label className="form-label fw-semibold text-secondary">
               Course
@@ -209,7 +203,6 @@ export default function StudentEnrollForm({
             )}
           </div>
 
-          {/* Subjects */}
           <div>
             <label
               htmlFor={subjectSelectInputId}
@@ -255,11 +248,13 @@ export default function StudentEnrollForm({
                       }
                     }}
                     placeholder="Select at least 3 subjects"
-                    menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                    menuPortalTarget={
+                      typeof document !== "undefined" ? document.body : null
+                    }
                     menuPosition="fixed"
                     styles={{
                       menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                      menu: (base) => ({ ...base, zIndex: 9999 })
+                      menu: (base) => ({ ...base, zIndex: 9999 }),
                     }}
                     maxMenuHeight={300}
                   />
@@ -275,8 +270,6 @@ export default function StudentEnrollForm({
               Selected: {watchedSubjectIds?.length || 0} / min 3
             </small>
           </div>
-
-          {/* Optional */}
 
           <div className="d-flex justify-content-end pt-2">
             <button
