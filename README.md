@@ -41,6 +41,11 @@ A small Next.js + TypeScript app for enrolling students into courses with a mode
 - [Tailwind CSS](https://tailwindcss.com/) 4.1.17
 - [Jest](https://jestjs.io/) 30.2 + [React Testing Library](https://testing-library.com/react) 16.3
 
+## Screenshots
+
+![App Screenshot](./images/sShot1.png)
+
+
 ## Getting Started
 
 ### Prerequisites
