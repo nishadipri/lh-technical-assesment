@@ -19,7 +19,7 @@ export default function Home() {
 
   const resolveNames = (data: FormValues): StudentSummaryData => {
     const selectedCourse = fetchedCourses.find((c) => c.id === data.courseId);
-    
+
     // Use the helper function to get subject names from IDs
     const subjectNames = getSubjectNames(data.subjectIds);
 
@@ -35,15 +35,16 @@ export default function Home() {
   };
 
   const handleEnroll = (data: FormValues) => {
-    // Check for duplicate email
     const emailExists = students.some(
       (student) => student.email.toLowerCase() === data.email.toLowerCase()
     );
-    
+
     if (emailExists) {
-      throw new Error(`A student with email "${data.email}" is already enrolled.`);
+      throw new Error(
+        `A student with email "${data.email}" is already enrolled.`
+      );
     }
-    
+
     const summary = resolveNames(data);
     setStudents((prev) => [...prev, summary]);
   };
@@ -64,18 +65,20 @@ export default function Home() {
 
   const handleUpdate = (data: FormValues) => {
     if (editIndex === null) return;
-    
-    // Check for duplicate email (excluding the current student being edited)
+
+    // Check for duplicate email
     const emailExists = students.some(
-      (student, index) => 
-        index !== editIndex && 
+      (student, index) =>
+        index !== editIndex &&
         student.email.toLowerCase() === data.email.toLowerCase()
     );
-    
+
     if (emailExists) {
-      throw new Error(`A student with email "${data.email}" is already enrolled.`);
+      throw new Error(
+        `A student with email "${data.email}" is already enrolled.`
+      );
     }
-    
+
     const updated = resolveNames(data);
     setStudents((prev) =>
       prev.map((row, i) => (i === editIndex ? updated : row))
@@ -87,14 +90,12 @@ export default function Home() {
     <div className="container py-5">
       <div className="row justify-content-center">
         <div className="col-12 col-xl-9">
-          {/* Reused form for enrolling (create) */}
           <StudentEnrollForm
             onSubmit={handleEnroll}
             submitLabel="Enroll"
             instanceIdPrefix="enroll"
           />
 
-          {/* Table with Edit action */}
           <StudentSummaryTable
             data={students}
             onEdit={(i) => setEditIndex(i)}
@@ -102,7 +103,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Reused form inside a modal for editing */}
       <StudentEditModal
         open={editIndex !== null && !!editingInitialValues}
         initialValues={
