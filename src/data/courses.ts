@@ -110,17 +110,17 @@ export const courses: CourseType[] = [
     name: "Computer Science",
 
     subjectIds: [
-      "sub-cs-101", // Data Structures and Algorithms
-      "sub-cs-102", // Operating Systems
-      "sub-cs-103", // Computer Networks
-      "sub-cs-104", // Database Systems
-      "sub-cs-105", // Software Engineering
-      "sub-shared-101", // Mathematics (shared)
-      "sub-shared-102", // Statistics (shared)
-      "sub-shared-104", // Technical Writing (shared)
-      "sub-shared-105", // English (shared)
-      "sub-shared-106", // Leadership (shared)
-      "sub-shared-107", // Communication Strategies (shared)
+      "sub-cs-101",
+      "sub-cs-102",
+      "sub-cs-103",
+      "sub-cs-104",
+      "sub-cs-105",
+      "sub-shared-101",
+      "sub-shared-102",
+      "sub-shared-104",
+      "sub-shared-105",
+      "sub-shared-106",
+      "sub-shared-107",
     ],
   },
   {
@@ -128,17 +128,16 @@ export const courses: CourseType[] = [
     name: "Business",
 
     subjectIds: [
-      "sub-bus-101", // Economics
-      "sub-bus-102", // Marketing
-      "sub-bus-103", // Finance
-      "sub-bus-104", // Management
-
-      "sub-shared-102", // Statistics (shared)
-      "sub-shared-103", // Project Management (shared)
-      "sub-shared-104", // Technical Writing (shared)
-      "sub-shared-105", // English (shared)
-      "sub-shared-106", // Leadership (shared)
-      "sub-shared-107", // Communication Strategies (shared)
+      "sub-bus-101",
+      "sub-bus-102",
+      "sub-bus-103",
+      "sub-bus-104",
+      "sub-shared-102",
+      "sub-shared-103",
+      "sub-shared-104",
+      "sub-shared-105",
+      "sub-shared-106",
+      "sub-shared-107",
     ],
   },
   {
@@ -146,24 +145,21 @@ export const courses: CourseType[] = [
     name: "Engineering",
 
     subjectIds: [
-      "sub-eng-101", // Thermodynamics
-      "sub-eng-102", // Fluid Mechanics
-      "sub-eng-103", // Structural Analysis
-      "sub-eng-104", // Control Systems
-      "sub-shared-101", // Mathematics (shared)
-      "sub-shared-102", // Statistics (shared)
-      "sub-shared-103", // Project Management (shared)
-      "sub-shared-104", // Technical Writing (shared)
-      "sub-shared-105", // English (shared)
-      "sub-shared-106", // Leadership (shared)
-      "sub-shared-107", // Communication Strategies (shared)
+      "sub-eng-101",
+      "sub-eng-102",
+      "sub-eng-103",
+      "sub-eng-104",
+      "sub-shared-101",
+      "sub-shared-102",
+      "sub-shared-103",
+      "sub-shared-104",
+      "sub-shared-105",
+      "sub-shared-106",
+      "sub-shared-107",
     ],
   },
 ];
 
-/**
- * Helper function to get subjects for a specific course
- */
 export const getSubjectsForCourse = (courseId: string): SubjectType[] => {
   const course = courses.find((c) => c.id === courseId);
   if (!course) return [];
@@ -173,23 +169,14 @@ export const getSubjectsForCourse = (courseId: string): SubjectType[] => {
     .filter(Boolean); // Filter out any undefined subjects
 };
 
-/**
- * Helper function to get subject by ID
- */
 export const getSubjectById = (subjectId: string): SubjectType | undefined => {
   return subjects[subjectId];
 };
 
-/**
- * Helper function to get subject names from IDs
- */
 export const getSubjectNames = (subjectIds: string[]): string[] => {
   return subjectIds.map((id) => subjects[id]?.name).filter(Boolean) as string[];
 };
 
-/**
- * Helper function to check if a subject belongs to a course
- */
 export const isSubjectInCourse = (
   subjectId: string,
   courseId: string
